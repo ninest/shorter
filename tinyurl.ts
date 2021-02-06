@@ -1,13 +1,6 @@
-const containsSpecialChars = (string: string) => {
-  const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-  return format.test(string);
-};
+import { containsSpecialChars } from "./utils.ts";
 
-export const shorten = async (
-  url: string,
-  alias?: string,
-  test = false // Used in testing
-) => {
+export const shorten = async (url: string, alias?: string) => {
   let apiUrl = `http://tinyurl.com/api-create.php?url=${url}`;
   if (alias) {
     if (containsSpecialChars(alias))
@@ -16,8 +9,6 @@ export const shorten = async (
     if (alias.length > 30) throw Error("Alias cannot be over 30 characters");
     apiUrl += `&alias=${alias}`;
   }
-
-  if (test) return apiUrl;
 
   const response = await fetch(apiUrl);
   if (response.ok) return await response.text();
